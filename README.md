@@ -1,72 +1,71 @@
 # QNAPFileManager
 
-Componente que permite gestionar archivos desde un servidor NAS soportado por QNAP.
+Component that allows you to manage files from a NAS server by QNAP.
 
-Disponible como paquete NuGet
+Available as a NuGet package
 
-## Acciones
-Se permiten acciones tales como:
-- Crear carpetas
-- Subir archivos
-- Descargar archivos
-- Eliminar archivos o carpetas
-- Listar contenido
+## Actions
+Actions such as:
+- Create folders
+- Upload files
+- Download files
+- Delete files or folders
+- List content
 
-## Ejemplo de uso
-
-Crear objeto
+## Usage example
+Instantiate object
 ```
 FileManager nas = new("http://192.168.1.6:8080");
 ```
 Login
 
 ```
-nas.Login("usuario", "xxxxxxxx");
+nas.Login("user", "xxxxxxxx");
 ```
-Verificar si un archivo o carpeta existe
+Check if a file or folder exists
 ```
-if (nas.Exists("/Carpeta/imagenes", "otra"))
+if (nas.Exists("/Folder/images", "other"))
 {
-    ...
+     ...
 }
 ```
-Crear una carpeta
+Create a folder
 ```
-nas.Create("/Carpeta/imagenes", "otra");
+nas.Create("/Folder/images", "other");
 ```
-Subir un archivo
+Upload a file
 ```
-nas.Upload(@"c:\temp\1.pdf", "/Carpeta/imagenes/otra");
+nas.Upload(@"c:\temp\1.pdf", "/Folder/images/other");
 ```
-Descargar un archivo
+Download a file
 ```
-nas.Download("/Carpeta/imagenes/otra", "1.pdf", @"c:\temp\1.pdf");
+nas.Download("/Folder/images/other", "1.pdf", @"c:\temp\1.pdf");
 ```
-Eliminar un archivo o carpeta
+Delete a file or folder
 ```
-nas.Delete("/Carpeta/imagenes/otra", "1.pdf");
+nas.Delete("/Folder/images/other", "1.pdf");
 ```
-Eliminar varios archivos o carpetas
+Delete multiple files or folders
 ```
-nas.Delete("/Carpeta/imagenes/otra", new string[] { "1.pdf", "2.pdf" });
+nas.Delete("/Folder/images/other", new string[] { "1.pdf", "2.pdf" });
 ```
-Listar todo el contenido (archivos y carpetas) ordenandos por criterios
+List all content (files and folders) sorted by criteria
 ```
-var files = nas.List<FileResponse>("/Carpeta/imagenes", ListType.ALL, sort: ListSortBy.FILESIZE, dir: ListSortDirection.Descending);
+var files = nas.List<FileResponse>("/Folder/images", ListType.ALL, sort: ListSortBy.FILESIZE, dir: ListSortDirection.Descending);
 Console.WriteLine(string.Join<FileResponse>(",", files));
 ```
-Listar archivos
+List files
 ```
-var files = nas.List<FileResponse>("/Carpeta/imagenes", ListType.FILE);
+var files = nas.List<FileResponse>("/Folder/images", ListType.FILE);
 Console.WriteLine(string.Join<FileResponse>(",", files));
 ```
-Listar carpetas
+List folders
 ```
-var folders = nas.List<FileResponse>("/Carpeta/imagenes", ListType.FOLDER);
+var folders = nas.List<FileResponse>("/Folder/images", ListType.FOLDER);
 Console.WriteLine(string.Join<FileResponse>(",", folders));
 ```
-Listar estructura
+List folder tree
 ```
-var folders = nas.List<FolderResponse>("/Carpeta/imagenes", ListType.TREE);
+var folders = nas.List<FolderResponse>("/Folder/images", ListType.TREE);
 Console.WriteLine(string.Join<FolderResponse>(",", folders));
 ```
