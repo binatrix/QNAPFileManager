@@ -172,6 +172,7 @@ namespace Binatrix.QNAP
         /// </summary>
         /// <param name="parentFolder">Carpeta base en la NAS donde se buscará</param>
         /// <param name="name">Nombre del elemento a buscar</param>
+        /// <param name="limit">Límite máximo de búsqueda</param>
         /// <returns>"true" si existe, "false" si no existe</returns>
         public bool Exists(string parentFolder, string name, int limit = 5000)
         {
