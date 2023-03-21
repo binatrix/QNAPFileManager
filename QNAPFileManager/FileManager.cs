@@ -173,13 +173,13 @@ namespace Binatrix.QNAP
         /// <param name="parentFolder">Carpeta base en la NAS donde se buscará</param>
         /// <param name="name">Nombre del elemento a buscar</param>
         /// <returns>"true" si existe, "false" si no existe</returns>
-        public bool Exists(string parentFolder, string name)
+        public bool Exists(string parentFolder, string name, int limit = 5000)
         {
             var url = BuildQuery("get_list", new NameValueCollection() {
                         { "path", parentFolder },
                         { "is_iso", "0" },
                         { "list_mode", "all" },
-                        { "limit", "1" },
+                        { "limit", limit.ToString() },
                         { "filename", name }
             });
             var response = client.GetAsync(url).Result;
