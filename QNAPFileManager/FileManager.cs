@@ -58,12 +58,12 @@ namespace Binatrix.QNAP
         }
 
         /// <summary>
-        /// Descarga un archivo desde la NAS
+        /// Obtiene un Stream desde la NAS
         /// </summary>
         /// <param name="folder">Carpeta base en la NAS donde está el archivo</param>
         /// <param name="file">Nombre del archivo a descargar</param>
-        /// <param name="destFile">Ruta completa del archivo de destino descargado</param>
-        public void Download(string folder, string file, string destFile)
+        /// <returns>Stream del archivo a descargar</returns>
+        public HttpContent Download(string folder, string file)
         {
             var url = BuildQuery("download", new NameValueCollection() {
                 { "source_path", folder },
@@ -72,19 +72,29 @@ namespace Binatrix.QNAP
                 { "compress", "0" },
                 { "source_total", "1" }
             });
-            using var response = client.GetAsync(url).Result;
+            var response = client.GetAsync(url).Result;
             if (response.Content.Headers.ContentType?.MediaType == "application/json") // Respuesta de status, hay un error
             {
                 var linea = response.Content.ReadAsStringAsync().Result;
                 CheckStatus(linea);
-                return;
             }
-            using var fileStream = new FileStream(destFile, FileMode.Create, FileAccess.Write);
-            var stream = response.Content.ReadAsStreamAsync().Result;
+            return response.Content;
+        }
+
+        /// <summary>
+        /// Descarga un archivo desde la NAS
+        /// </summary>
+        /// <param name="folder">Carpeta base en la NAS donde está el archivo</param>
+        /// <param name="file">Nombre del archivo a descargar</param>
+        /// <param name="destFile">Ruta completa del archivo de destino descargado</param>
+        public void Download(string folder, string file, string destFile)
+        {
+            var stream = Download(folder, file).ReadAsStreamAsync().Result;
             if (stream.Length == 0)
             {
                 CheckStatus(JsonConvert.SerializeObject(new StatusResponse { Status = 5 }));
             }
+            using var fileStream = new FileStream(destFile, FileMode.Create, FileAccess.Write);
             stream.CopyTo(fileStream);
         }
 

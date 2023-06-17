@@ -9,7 +9,7 @@
     <Authors>Marcelo Chávez</Authors>
     <Company>Binatrix</Company>
     <Description>Remote file management using FileStation HTTP API for QNAP NAS</Description>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.0.2</VersionPrefix>
     <RepositoryUrl>https://github.com/binatrix/QNAPFileManager.git</RepositoryUrl>
     <PackageTags>qnap;nas;file;manager;station;api</PackageTags>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -17,7 +17,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Fix problem in Exists method</PackageReleaseNotes>
+    <PackageReleaseNotes>Add new stream download method</PackageReleaseNotes>
     <Copyright>Copyright (c) 2023 Binatrix</Copyright>
   </PropertyGroup>
 

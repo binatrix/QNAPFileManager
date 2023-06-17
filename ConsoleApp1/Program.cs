@@ -25,6 +25,14 @@ try
     Console.WriteLine(string.Join<FileResponse>(",", folders));
     var folders2 = nas.List<FolderResponse>(baseFolder, ListType.TREE);
     Console.WriteLine(string.Join<FileResponse>(",", folders));
+
+    var stream = nas.Download(baseFolder, "test.txt");
+    using StreamReader reader = new(stream.ReadAsStreamAsync().Result, System.Text.Encoding.UTF8);
+    string line;
+    while ((line = reader.ReadLine()) != null)
+    {
+        Console.WriteLine(line);
+    }
 }
 catch (Exception ex)
 {
