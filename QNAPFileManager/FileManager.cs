@@ -58,7 +58,7 @@ namespace Binatrix.QNAP
         }
 
         /// <summary>
-        /// Obtiene un Stream desde la NAS
+        /// Obtiene un Stream para un archivo desde la NAS
         /// </summary>
         /// <param name="folder">Carpeta base en la NAS donde está el archivo</param>
         /// <param name="file">Nombre del archivo a descargar</param>
