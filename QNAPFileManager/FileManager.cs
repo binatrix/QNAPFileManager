@@ -73,6 +73,10 @@ namespace Binatrix.QNAP
                 { "source_total", "1" }
             });
             var response = client.GetAsync(url).Result;
+            if (response.Content.Headers.ContentLength == null || (long)response.Content.Headers.ContentLength <= 0)
+            {
+                throw new Exception($"File \"{file}\" was not found in folder \"{folder}\"");
+            }
             if (response.Content.Headers.ContentType?.MediaType == "application/json") // Respuesta de status, hay un error
             {
                 var linea = response.Content.ReadAsStringAsync().Result;
