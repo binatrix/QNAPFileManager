@@ -204,8 +204,9 @@ namespace Binatrix.QNAP
             string jsonString = new StreamReader(stream, Encoding.ASCII).ReadToEnd();
             if (jsonString.Contains("status"))
             {
+                if (GetStatus(jsonString) == 5) // File not found
+                    return false;
                 CheckStatus(jsonString);
-                return false;
             }
             var items = JsonConvert.DeserializeObject<FilesResponse>(jsonString);
             if (items == null) return false;
@@ -326,8 +327,7 @@ namespace Binatrix.QNAP
 
         private static void CheckStatus(string jsonString)
         {
-            var json = JsonConvert.DeserializeObject<StatusResponse>(jsonString);
-            int status = json == null ? 0 : json.Status;
+            int status = GetStatus(jsonString);
             if (status != 1)
             {
                 string err = status switch
@@ -345,6 +345,13 @@ namespace Binatrix.QNAP
                 };
                 throw new Exception($"Status {status}: {err}");
             }
+        }
+
+        private static int GetStatus(string jsonString)
+        {
+            var json = JsonConvert.DeserializeObject<StatusResponse>(jsonString);
+            int status = json == null ? 0 : json.Status;
+            return status;
         }
 
         #endregion

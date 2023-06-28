@@ -9,7 +9,7 @@
     <Authors>Marcelo Chávez</Authors>
     <Company>Binatrix</Company>
     <Description>Remote file management using FileStation HTTP API for QNAP NAS</Description>
-    <VersionPrefix>1.0.3</VersionPrefix>
+    <VersionPrefix>1.0.4</VersionPrefix>
     <RepositoryUrl>https://github.com/binatrix/QNAPFileManager.git</RepositoryUrl>
     <PackageTags>qnap;nas;file;manager;station;api</PackageTags>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -17,7 +17,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Check stream is empty on download</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix method "Exists" when folder doesn't exists</PackageReleaseNotes>
     <Copyright>Copyright (c) 2023 Binatrix</Copyright>
   </PropertyGroup>
 
