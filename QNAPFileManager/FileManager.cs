@@ -289,6 +289,26 @@ namespace Binatrix.QNAP
             return Array.Empty<T>();
         }
 
+        /// <summary>
+        /// Obtiene el tamaño de una carpeta o archivo en la NAS
+        /// </summary>
+        /// <param name="folder">Carpeta base en la NAS donde está el archivo</param>
+        /// <param name="file">Nombre del archivo a descargar</param>
+        /// <returns>SizeResponse con información del tamaño del archivo o carpeta</returns>
+        public SizeResponse GetSize(string folder, string file)
+        {
+            var url = BuildQuery("get_file_size", new NameValueCollection() {
+                { "path", folder },
+                { "name", file },
+                { "total", "1" }
+            });
+            var response = client.GetAsync(url).Result;
+            var jsonString = response.Content.ReadAsStringAsync().Result;
+            CheckStatus(jsonString);
+            var json = JsonConvert.DeserializeObject<SizeResponse>(jsonString);
+            return json;
+        }
+
         #region Privado
         private string BuildQuery(string func, NameValueCollection nvc)
         {
@@ -361,6 +381,41 @@ namespace Binatrix.QNAP
     {
         public int Status { get; set; }
         public bool Success { get; set; }
+    }
+
+    /// <summary>
+    /// Clase con la información del del tamaño de una carpeta o archivo
+    /// </summary>
+    public class SizeResponse
+    {
+        public int Status { get; set; }
+        public long Size { get; set; }
+        public int FileCnt { get; set; }
+        public int FolderCnt { get; set; }
+
+        public double KB
+        {
+            get
+            {
+                return Size / 1024;
+            }
+        }
+
+        public double MB
+        {
+            get
+            {
+                return KB / 1024;
+            }
+        }
+
+        public double GB
+        {
+            get
+            {
+                return MB / 1024;
+            }
+        }
     }
 
     /// <summary>
