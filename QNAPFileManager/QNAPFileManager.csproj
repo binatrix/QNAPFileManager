@@ -9,7 +9,7 @@
     <Authors>Marcelo Chávez</Authors>
     <Company>Binatrix</Company>
     <Description>Remote file management using FileStation HTTP API for QNAP NAS</Description>
-    <VersionPrefix>1.0.5</VersionPrefix>
+    <VersionPrefix>1.0.6</VersionPrefix>
     <RepositoryUrl>https://github.com/binatrix/QNAPFileManager.git</RepositoryUrl>
     <PackageTags>qnap;nas;file;manager;station;api</PackageTags>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -17,7 +17,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Add new method "GetSize" to get Folder/File size</PackageReleaseNotes>
+    <PackageReleaseNotes>Add property "TB" to method "GetSize" to get Folder/File size</PackageReleaseNotes>
     <Copyright>Copyright (c) 2023 Binatrix</Copyright>
   </PropertyGroup>
 

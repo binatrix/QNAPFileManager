@@ -416,6 +416,13 @@ namespace Binatrix.QNAP
                 return MB / 1024;
             }
         }
+        public double TB
+        {
+            get
+            {
+                return GB / 1024;
+            }
+        }
     }
 
     /// <summary>
