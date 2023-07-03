@@ -9,6 +9,7 @@ using System.Web;
 using System.Xml;
 using Microsoft.AspNetCore.StaticFiles;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Binatrix.QNAP
 {
@@ -221,6 +222,7 @@ namespace Binatrix.QNAP
         /// <param name="limit">Cantidad máxima de registros a retornar (por defecto 500)</param>
         /// <param name="sort" cref="ListSortBy">Campo para ordenar los resultados</param>
         /// <param name="dir" cref="ListSortDirection">Orden de los resultados (ascendentes o descendentes)</param>
+        /// <param name="filter">Expresión RegEx para filtrar los resultados en base a un patrón</param>
         /// <typeparam name="T">Clase de retorno de resultados. Para TREE <see cref="FolderResponse"/>, para otros <see cref="FileResponse"/></typeparam>
         /// <example>
         /// <code>
@@ -231,7 +233,7 @@ namespace Binatrix.QNAP
         /// </code>
         /// </example>
         /// <returns>Arreglo con el listado de resultados</returns>
-        public T[] List<T>(string parentFolder, ListType type, int limit = 500, ListSortBy sort = ListSortBy.FILENAME, ListSortDirection dir = ListSortDirection.Ascending)
+        public T[] List<T>(string parentFolder, ListType type, int limit = 500, ListSortBy sort = ListSortBy.FILENAME, ListSortDirection dir = ListSortDirection.Ascending, string? filter = null)
         {
             string url = "";
             switch (type)
@@ -272,11 +274,12 @@ namespace Binatrix.QNAP
                     case ListType.FILE:
                     case ListType.FOLDER:
                         {
+                            Regex? regex = filter == null ? null : new Regex(filter);
                             var items = JsonConvert.DeserializeObject<FilesResponse>(jsonString);
                             if (items == null) return Array.Empty<T>();
-                            else if (type == ListType.ALL) return (T[])(object)items.Datas.ToArray();
-                            else if (type == ListType.FILE) return (T[])(object)items.Datas.FindAll(x => x.IsFolder == false).ToArray();
-                            else if (type == ListType.FOLDER) return (T[])(object)items.Datas.FindAll(x => x.IsFolder == true).ToArray();
+                            else if (type == ListType.ALL) return (T[])(object)RegexFilter(items.Datas, regex).ToArray();
+                            else if (type == ListType.FILE) return (T[])(object)RegexFilter(items.Datas.FindAll(x => x.IsFolder == false), regex).ToArray();
+                            else if (type == ListType.FOLDER) return (T[])(object)RegexFilter(items.Datas.FindAll(x => x.IsFolder == true), regex).ToArray();
                         }
                         break;
                     case ListType.TREE:
@@ -287,6 +290,14 @@ namespace Binatrix.QNAP
                 }
             }
             return Array.Empty<T>();
+        }
+
+        private List<FileResponse> RegexFilter(List<FileResponse> items, Regex? regex)
+        {
+            if (regex != null)
+                return items.Where(x => regex.IsMatch(x.Filename)).ToList();
+            else
+                return items;
         }
 
         /// <summary>
