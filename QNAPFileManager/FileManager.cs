@@ -151,6 +151,22 @@ namespace Binatrix.QNAP
         }
 
         /// <summary>
+        /// Renombra unacarpeta o archivo en la NAS
+        /// </summary>
+        /// <param name="parentFolder">Carpeta base en la NAS donde crear la nueva carpeta</param>
+        /// <param name="oldName">Nombre del elemento (carpeta/archivo) a renombrar</param>
+        /// <param name="newName">Nuevo nombre a asignar</param>
+        public void Rename(string parentFolder, string oldName, string newName)
+        {
+            var url = BuildQuery("rename", new NameValueCollection() {
+                { "path", parentFolder },
+                { "source_name", oldName },
+                { "dest_name", newName }
+            });
+            ExecuteQuery(url);
+        }
+
+        /// <summary>
         /// Elimina una carpeta o un archivo desde la NAS
         /// </summary>
         /// <param name="parentFolder">Carpeta base en la NAS donde está el archivo a eliminar</param>
