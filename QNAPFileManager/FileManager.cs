@@ -125,6 +125,11 @@ namespace Binatrix.QNAP
                 { "type", "standard" },
                 { "overwrite", "1" }
             });
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(sourceFile, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
             FileStream fileStream = new(sourceFile, FileMode.Open, FileAccess.Read);
             StreamContent streamContent = new(fileStream);
             streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
@@ -132,11 +137,6 @@ namespace Binatrix.QNAP
                 Name = name,
                 FileName = sourceFile
             };
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(sourceFile, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
             streamContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             using var formData = new MultipartFormDataContent
             {
