@@ -107,10 +107,21 @@ namespace Binatrix.QNAP
         /// <param name="destFolder">Ruta de la carpeta destino donde subir el archivo</param>
         public void Upload(string sourceFile, string destFolder)
         {
-            string file = Path.GetFileName(sourceFile);
+            string name = Path.GetFileName(sourceFile);
+            Upload(sourceFile, destFolder, name);
+        }
+
+        /// <summary>
+        /// Sube un archivo local hacia la NAS
+        /// </summary>
+        /// <param name="sourceFile">Ruta completa del archivo local a subir</param>
+        /// <param name="destFolder">Ruta de la carpeta destino donde subir el archivo</param>
+        /// <param name="name">Nuevo nombre del archivo</param>
+        public void Upload(string sourceFile, string destFolder, string name)
+        {
             var url = BuildQuery("upload", new NameValueCollection() {
                 { "dest_path", destFolder },
-                { "progress", (destFolder + "/" + file).Replace("/", "-") },
+                { "progress", (destFolder + "/" + name).Replace("/", "-") },
                 { "type", "standard" },
                 { "overwrite", "1" }
             });
@@ -118,7 +129,7 @@ namespace Binatrix.QNAP
             StreamContent streamContent = new(fileStream);
             streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
-                Name = file,
+                Name = name,
                 FileName = sourceFile
             };
             var provider = new FileExtensionContentTypeProvider();
