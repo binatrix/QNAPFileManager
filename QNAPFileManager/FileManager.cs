@@ -18,6 +18,7 @@ namespace Binatrix.QNAP
         private readonly string baseUrl;
         private readonly HttpClient client = new();
         private string? sid;
+        private Encoding enc;
 
         /// <summary>
         /// Constructor
@@ -28,6 +29,7 @@ namespace Binatrix.QNAP
         {
             this.baseUrl = baseUrl;
             this.sid = null;
+            this.enc = Encoding.UTF8;
         }
 
 
@@ -40,7 +42,7 @@ namespace Binatrix.QNAP
         public void Login(string user, string pass)
         {
             sid = null;
-            string encode_string = Convert.ToBase64String(Encoding.UTF8.GetBytes(pass));
+            string encode_string = Convert.ToBase64String(enc.GetBytes(pass));
             string url = $"{baseUrl}/cgi-bin/authLogin.cgi?user={user}&pwd={encode_string}";
             var response = client.GetAsync(url).Result;
             if (response.StatusCode != HttpStatusCode.OK)
@@ -226,7 +228,7 @@ namespace Binatrix.QNAP
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.ReasonPhrase);
             var stream = response.Content.ReadAsStreamAsync().Result;
-            string jsonString = new StreamReader(stream, Encoding.ASCII).ReadToEnd();
+            string jsonString = new StreamReader(stream, enc).ReadToEnd();
             if (jsonString.Contains("status"))
             {
                 if (GetStatus(jsonString) == 5) // File not found
@@ -285,7 +287,7 @@ namespace Binatrix.QNAP
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.ReasonPhrase);
             var stream = response.Content.ReadAsStreamAsync().Result;
-            string jsonString = new StreamReader(stream, Encoding.ASCII).ReadToEnd();
+            string jsonString = new StreamReader(stream, enc).ReadToEnd();
             if (jsonString.Contains("status"))
             {
                 CheckStatus(jsonString);
@@ -366,7 +368,7 @@ namespace Binatrix.QNAP
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception(response.ReasonPhrase);
             var stream = response.Content.ReadAsStreamAsync().Result;
-            string jsonString = new StreamReader(stream, Encoding.ASCII).ReadToEnd();
+            string jsonString = new StreamReader(stream, enc).ReadToEnd();
             CheckStatus(jsonString);
         }
 
